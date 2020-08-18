@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # name of deployment
+  name: posts-depl
+spec:
+  # number of pods
+  replicas: 1
+  # Hey deployment, take a look at pods
+  selector:
+    # with the label `posts`
+    matchLabels:
+      # `app` here is nothing to do here, can be any key value pair
+      app: posts
+  # exact config for pod
+  template:
+    metadata:
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: naingaungphyo/posts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  selector:
+    app: posts
+  #type: ClusterIP #optional, default will be ClusterIP
+  ports:
+    - name: posts
+      protocol: TCP
+      port: 4000
+      targetPort: 4000

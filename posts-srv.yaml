@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # name of service, need to be different among services of same pod
+  # otherwise it will be overwritten to the old one with the new one
+  name: posts-srv
+spec:
+  # service type
+  type: NodePort
+  # to select pods with label `posts` that we named inside deployment config
+  selector:
+    app: posts
+  # expose the port that the app is listening
+  ports:
+    # use this name for logging purposes
+    - name: posts
+      protocol: TCP
+      # node service port (inside Node)
+      port: 4000
+      # actual port that the app is listening
+      targetPort: 4000

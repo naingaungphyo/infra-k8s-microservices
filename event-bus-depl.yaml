@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # name of deployment
+  name: event-bus-depl
+spec:
+  # number of pods
+  replicas: 1
+  # Hey deployment, take a look at pods
+  selector:
+    # with the label `event-bus`
+    matchLabels:
+      # `app` here is nothing to do here, can be any key value pair
+      app: event-bus
+  # exact config for pod
+  template:
+    metadata:
+      labels:
+        app: event-bus
+    spec:
+      containers:
+        - name: event-bus
+          image: naingaungphyo/event-bus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv
+spec:
+  selector:
+    app: event-bus
+  #type: ClusterIP #optional, default will be ClusterIP
+  ports:
+    - name: event-bus
+      protocol: TCP
+      port: 4005
+      targetPort: 4005

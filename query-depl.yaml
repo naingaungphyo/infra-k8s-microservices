@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # name of deployment
+  name: query-depl
+spec:
+  # number of pods
+  replicas: 1
+  # Hey deployment, take a look at pods
+  selector:
+    # with the label `query`
+    matchLabels:
+      # `app` here is nothing to do here, can be any key value pair
+      app: query
+  # exact config for pod
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+        - name: query
+          image: naingaungphyo/query
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  selector:
+    app: query
+  #type: ClusterIP #optional, default will be ClusterIP
+  ports:
+    - name: query
+      protocol: TCP
+      port: 4002
+      targetPort: 4002

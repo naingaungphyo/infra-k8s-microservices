@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # name of deployment
+  name: moderation-depl
+spec:
+  # number of pods
+  replicas: 1
+  # Hey deployment, take a look at pods
+  selector:
+    # with the label `moderation`
+    matchLabels:
+      # `app` here is nothing to do here, can be any key value pair
+      app: moderation
+  # exact config for pod
+  template:
+    metadata:
+      labels:
+        app: moderation
+    spec:
+      containers:
+        - name: moderation
+          image: naingaungphyo/moderation
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv
+spec:
+  selector:
+    app: moderation
+  #type: ClusterIP #optional, default will be ClusterIP
+  ports:
+    - name: moderation
+      protocol: TCP
+      port: 4003
+      targetPort: 4003
